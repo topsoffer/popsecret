@@ -53,21 +53,12 @@
     .desc{margin-top:12px;background:#fafbfd;border:1px solid var(--border);border-radius:10px;padding:14px 16px}
     .desc h3{margin:0 0 8px 0;font-size:18px}
     .desc p{margin:6px 0;line-height:1.6}
-    .desc ul{margin:8px 0 0 18px}
 
     /* Feature icons */
     .features{margin-top:10px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
     .feat{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--border);border-radius:10px;padding:10px 12px}
     .feat .ico{font-size:20px;line-height:1.2}
     .feat b{display:block}
-
-    /* Nutrition table */
-    .nutrition{margin-top:12px;background:#fff;border:1px solid var(--border);border-radius:10px}
-    .nutrition .nh{background:#f6f8fc;border-bottom:1px solid var(--border);padding:10px 12px;font-weight:bold}
-    .nutrition table{width:100%;border-collapse:collapse}
-    .nutrition td{padding:8px 12px;border-bottom:1px solid var(--border);font-size:14px}
-    .nutrition tr:last-child td{border-bottom:none}
-    .note{font-size:12px;color:#555;margin-top:6px}
 
     .buybox .row{display:flex;align-items:center;gap:10px;margin:8px 0}
     .qty input{width:56px;text-align:center;padding:6px;border:1px solid #ccc;border-radius:4px}
@@ -78,6 +69,7 @@
     .form label{display:block;margin-top:10px;font-size:14px}
     .form input,.form textarea{width:100%;padding:10px;border:1px solid #ccc;border-radius:6px;margin-top:6px;font-size:15px}
     .qrcode{text-align:center;margin-top:14px}
+    .note{font-size:12px;color:#555;margin-top:8px}
     .ok{color:#067d62;text-align:center;margin-top:10px}
     .err{color:#b12704;text-align:center;margin-top:10px}
 
@@ -90,18 +82,43 @@
     .sum-total{font-weight:bold;font-size:16px;margin-top:6px}
     .free{color:#067d62;font-weight:bold}
 
+    /* Reviews (restyled) */
     .reviews{margin-top:18px}
-    .review-item{border-top:1px solid var(--border);padding:12px 0}
-    .review-head{display:flex;justify-content:space-between;align-items:center}
-    .review-name{font-weight:bold}
-    .review-date{color:#666;font-size:12px}
+    .review-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .review-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 12px}
+    .r-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+    .avatar{width:36px;height:36px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:#eef2f7;color:#445}
+    .r-name{font-weight:bold}
+    .r-verified{font-size:12px;color:#067d62;background:#e7f6f1;border:1px solid #c6ece1;padding:2px 6px;border-radius:12px;margin-left:auto}
+    .r-stars{color:var(--star);font-size:14px;margin:4px 0}
+    .r-date{color:#888;font-size:12px}
+    .r-text{margin-top:4px;line-height:1.55}
+    .r-actions{margin-top:8px;display:flex;gap:10px}
+    .chip{font-size:12px;border:1px solid var(--border);border-radius:999px;padding:4px 8px;color:#333;background:#fafafa}
 
-    footer{padding:24px;text-align:center;color:#666}
+    /* Share buttons */
+    .share-row{display:flex;gap:10px;margin-top:10px}
+    .share-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:#fff;border-radius:999px;padding:8px 12px;font-size:13px;cursor:pointer}
+    .share-ico{font-size:16px}
 
-    @media (max-width: 980px){
+    /* Sticky Buy Bar (mobile) */
+    .stickybar{display:none}
+    @media (max-width: 720px){
       .container{grid-template-columns:1fr}
       .shipbar{top:48px}
       .features{grid-template-columns:1fr}
+      .review-grid{grid-template-columns:1fr}
+      .stickybar{
+        display:flex;align-items:center;gap:10px;
+        position:fixed;bottom:0;left:0;right:0;
+        background:#fff;border-top:1px solid var(--border);
+        padding:10px 12px;z-index:50;
+        box-shadow:0 -4px 12px rgba(0,0,0,.06);
+      }
+      body{padding-bottom:78px}
+      .stickybar .price-mini{color:var(--price);font-weight:bold}
+      .stickybar input{width:56px;text-align:center;padding:6px;border:1px solid #ccc;border-radius:6px}
+      .stickybar .btn-buynow{margin:0;border-radius:8px;white-space:nowrap}
     }
   </style>
 </head>
@@ -164,31 +181,74 @@
             <div class="feat"><div class="ico">🎬</div><div><b id="f4h">Made for Movie Night</b><div id="f4t">Perfect for Netflix, parties, or a quick snack.</div></div></div>
           </div>
 
-          <!-- Nutrition facts (Example values: please edit) -->
-          <div class="nutrition" style="margin-top:12px">
-            <div class="nh" id="t_nutri_title">Nutrition Facts (example)</div>
-            <table>
-              <tr><td id="t_serving">Serving size</td><td>2 cups popped (example)</td></tr>
-              <tr><td id="t_calories">Calories</td><td>160 (example)</td></tr>
-              <tr><td id="t_fat">Total Fat</td><td>10 g (example)</td></tr>
-              <tr><td id="t_satfat">Saturated Fat</td><td>4 g (example)</td></tr>
-              <tr><td id="t_sodium">Sodium</td><td>300 mg (example)</td></tr>
-              <tr><td id="t_carbs">Total Carbs</td><td>16 g (example)</td></tr>
-              <tr><td id="t_sugar">Total Sugars</td><td>0 g (example)</td></tr>
-              <tr><td id="t_protein">Protein</td><td>3 g (example)</td></tr>
-            </table>
-            <div class="note" id="t_nutri_note">*Example values — replace with your package label.</div>
+          <!-- Share buttons -->
+          <div class="share-row">
+            <button class="share-btn" id="shareLine"><span class="share-ico">💚</span> Share on LINE</button>
+            <button class="share-btn" id="shareFb"><span class="share-ico">🔵</span> Share on Facebook</button>
           </div>
         </div>
       </div>
 
+      <!-- Reviews (restyled cards) -->
       <div class="reviews">
         <h2 id="t_reviews_title">Customer reviews</h2>
-        <div class="review-item"><div class="review-head"><div class="review-name">Beam</div><div class="review-date">2025-08-01</div></div><p>★★★★★ Smells just like the cinema!</p></div>
-        <div class="review-item"><div class="review-head"><div class="review-name">Nan</div><div class="review-date">2025-07-28</div></div><p>★★★★☆ Will repurchase!</p></div>
-        <div class="review-item"><div class="review-head"><div class="review-name">Mint</div><div class="review-date">2025-07-20</div></div><p>★★★★★ Kids love it</p></div>
-        <div class="review-item"><div class="review-head"><div class="review-name">Art</div><div class="review-date">2025-07-12</div></div><p>★★★★★ Fast shipping</p></div>
-        <div class="review-item"><div class="review-head"><div class="review-name">Pat</div><div class="review-date">2025-07-05</div></div><p>★★★★☆ Worth the price</p></div>
+        <div class="review-grid">
+          <div class="review-card">
+            <div class="r-head">
+              <div class="avatar">B</div>
+              <div class="r-name">Beam</div>
+              <div class="r-verified">Verified</div>
+            </div>
+            <div class="r-stars">★★★★★</div>
+            <div class="r-date">2025-08-01</div>
+            <div class="r-text">Smells just like the cinema! Perfect for Netflix nights.</div>
+            <div class="r-actions"><span class="chip">👍 Helpful</span><span class="chip">🍿 Good taste</span></div>
+          </div>
+          <div class="review-card">
+            <div class="r-head">
+              <div class="avatar">N</div>
+              <div class="r-name">Nan</div>
+              <div class="r-verified">Verified</div>
+            </div>
+            <div class="r-stars">★★★★☆</div>
+            <div class="r-date">2025-07-28</div>
+            <div class="r-text">Richer butter flavor than other brands. Will repurchase!</div>
+            <div class="r-actions"><span class="chip">👍 Helpful</span><span class="chip">⚡ Fast ship</span></div>
+          </div>
+          <div class="review-card">
+            <div class="r-head">
+              <div class="avatar">M</div>
+              <div class="r-name">Mint</div>
+              <div class="r-verified">Verified</div>
+            </div>
+            <div class="r-stars">★★★★★</div>
+            <div class="r-date">2025-07-20</div>
+            <div class="r-text">Crispy and buttery, kids love it!</div>
+            <div class="r-actions"><span class="chip">👍 Helpful</span><span class="chip">👨‍👩‍👧 Family</span></div>
+          </div>
+          <div class="review-card">
+            <div class="r-head">
+              <div class="avatar">A</div>
+              <div class="r-name">Art</div>
+              <div class="r-verified">Verified</div>
+            </div>
+            <div class="r-stars">★★★★★</div>
+            <div class="r-date">2025-07-12</div>
+            <div class="r-text">Fast shipping and great taste.</div>
+            <div class="r-actions"><span class="chip">👍 Helpful</span><span class="chip">🚚 Shipping</span></div>
+          </div>
+          <div class="review-card">
+            <div class="r-head">
+              <div class="avatar">P</div>
+              <div class="r-name">Pat</div>
+              <div class="r-verified">Verified</div>
+            </div>
+            <div class="r-stars">★★★★☆</div>
+            <div class="r-date">2025-07-05</div>
+            <div class="r-text">Big portion, worth the price.</div>
+            <div class="r-actions"><span class="chip">👍 Helpful</span><span class="chip">💰 Value</span></div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -224,6 +284,13 @@
       <div id="err" class="err" style="display:none;"></div>
     </aside>
   </main>
+
+  <!-- Sticky Buy Bar (mobile) -->
+  <div class="stickybar" id="stickyBar">
+    <div class="price-mini"><span id="stickyPrice">1299</span> THB</div>
+    <input id="stickyQty" type="number" min="1" max="3" value="1" />
+    <button class="btn-buynow" id="stickyBuyBtn">Buy Now</button>
+  </div>
 
   <footer>© 2025 TopsOffer Thailand</footer>
 
@@ -261,12 +328,7 @@
         f1h:"เมล็ดพรีเมียม", f1t:"แตกฟู กรอบ หอมทุกคำ",
         f2h:"Movie Theater Butter", f2t:"กลิ่นเนยสไตล์โรงหนัง เข้มข้น",
         f3h:"พร้อมกินใน 3–4 นาที", f3t:"แค่อุ่นไมโครเวฟ—ไม่ต้องใช้น้ำมัน",
-        f4h:"เกิดมาเพื่อคืนดูหนัง", f4t:"เหมาะกับซีรีส์ ปาร์ตี้ หรือของว่างเร็ว ๆ",
-        // Nutrition (TH)
-        nutri_title:"ข้อมูลโภชนาการ (ตัวอย่าง)",
-        serving:"หน่วยบริโภค", calories:"พลังงาน", fat:"ไขมันทั้งหมด", satfat:"ไขมันอิ่มตัว",
-        sodium:"โซเดียม", carbs:"คาร์โบไฮเดรต", sugar:"น้ำตาล", protein:"โปรตีน",
-        nutri_note:"*ค่าตัวอย่าง — กรุณาแก้ไขให้ตรงฉลากสินค้า"
+        f4h:"เกิดมาเพื่อคืนดูหนัง", f4t:"เหมาะกับซีรีส์ ปาร์ตี้ หรือของว่างเร็ว ๆ"
       },
       en:{
         brand:"TopsOffer Thailand", cart:"🛒 Cart", name:"Pop Secret Popcorn Movie Theater Butter 588g",
@@ -286,12 +348,7 @@
         f1h:"Premium Kernels", f1t:"Fluffy, crispy pops for a satisfying crunch.",
         f2h:"Movie Theater Butter", f2t:"Savory, buttery flavor that feels like the cinema.",
         f3h:"Ready in 3–4 mins", f3t:"Just microwave—no oil, no pan, no mess.",
-        f4h:"Made for Movie Night", f4t:"Perfect for Netflix, parties, or a quick snack.",
-        // Nutrition (EN)
-        nutri_title:"Nutrition Facts (example)",
-        serving:"Serving size", calories:"Calories", fat:"Total Fat", satfat:"Saturated Fat",
-        sodium:"Sodium", carbs:"Total Carbs", sugar:"Total Sugars", protein:"Protein",
-        nutri_note:"*Example values — replace with your package label."
+        f4h:"Made for Movie Night", f4t:"Perfect for Netflix, parties, or a quick snack."
       }
     };
     const lang = (navigator.language||'en').toLowerCase().startsWith('th') ? 'th' : 'en';
@@ -331,17 +388,6 @@
       document.getElementById('f2h').textContent = t.f2h; document.getElementById('f2t').textContent = t.f2t;
       document.getElementById('f3h').textContent = t.f3h; document.getElementById('f3t').textContent = t.f3t;
       document.getElementById('f4h').textContent = t.f4h; document.getElementById('f4t').textContent = t.f4t;
-      // nutrition labels
-      document.getElementById('t_nutri_title').textContent = t.nutri_title;
-      document.getElementById('t_serving').textContent = t.serving;
-      document.getElementById('t_calories').textContent = t.calories;
-      document.getElementById('t_fat').textContent = t.fat;
-      document.getElementById('t_satfat').textContent = t.satfat;
-      document.getElementById('t_sodium').textContent = t.sodium;
-      document.getElementById('t_carbs').textContent = t.carbs;
-      document.getElementById('t_sugar').textContent = t.sugar;
-      document.getElementById('t_protein').textContent = t.protein;
-      document.getElementById('t_nutri_note').textContent = t.nutri_note;
 
       updateStockBadge(); updateViewer(); updateSales(); updateCountdown();
       document.getElementById('fname').placeholder = lang==='th' ? 'ชื่อ-นามสกุล' : 'John Doe';
@@ -373,10 +419,40 @@
       sumItemsEl.textContent = items.toString();
       sumShipEl.textContent = t.free;
       sumGrandEl.textContent = grand.toString();
+      // sticky sync
+      document.getElementById('stickyPrice').textContent = items.toString();
+      document.getElementById('stickyQty').value = qty;
     }
     qtyInput.addEventListener('input', updateTotalsAndSummary);
     qtyInput.addEventListener('change', updateTotalsAndSummary);
     updateTotalsAndSummary();
+
+    // Sticky bar qty sync
+    const stickyQty = document.getElementById('stickyQty');
+    stickyQty.addEventListener('input', ()=>{
+      let q = clampQty(parseInt(stickyQty.value||'1'));
+      stickyQty.value = q; qtyInput.value = q; updateTotalsAndSummary();
+    });
+
+    // Share buttons
+    function getShareUrl(){
+      return window.location.href.split('#')[0];
+    }
+    function openCentered(url){
+      const w=560,h=640,l=(screen.width-w)/2,t=(screen.height-h)/2;
+      window.open(url,'share',`width=${w},height=${h},left=${l},top=${t}`);
+    }
+    document.getElementById('shareLine').addEventListener('click', ()=>{
+      const u = encodeURIComponent(getShareUrl());
+      const txt = encodeURIComponent("Pop Secret Popcorn 588g — Movie Theater Butter");
+      const url = `https://social-plugins.line.me/lineit/share?url=${u}%0A${txt}`;
+      openCentered(url);
+    });
+    document.getElementById('shareFb').addEventListener('click', ()=>{
+      const u = encodeURIComponent(getShareUrl());
+      const url = `https://www.facebook.com/sharer/sharer.php?u=${u}`;
+      openCentered(url);
+    });
 
     // Inventory & viewers & sales
     function updateStockBadge(){
@@ -400,6 +476,12 @@
       qtyInput.value = clampQty(cur + 1); updateTotalsAndSummary(); document.getElementById('orderForm').scrollIntoView({behavior:'smooth'});
     });
     document.getElementById('btnBuyNow').addEventListener('click', ()=>{ document.getElementById('orderForm').reportValidity(); if(document.getElementById('orderForm').checkValidity()){ submitOrder(); } });
+    document.getElementById('stickyBuyBtn').addEventListener('click', ()=>{
+      document.getElementById('orderForm').reportValidity();
+      if(document.getElementById('orderForm').checkValidity()){
+        submitOrder();
+      }
+    });
 
     // Submit
     document.getElementById('orderForm').addEventListener('submit', (e)=>{ e.preventDefault(); submitOrder(); });
@@ -412,7 +494,7 @@
     }
 
     async function submitOrder(){
-      const q = clampQty(parseInt(qtyInput.value||'1'));
+      const q = clampQty(parseInt(document.getElementById('quantity').value||'1'));
       if(q > 3){ alert(lang==='th' ? 'สั่งซื้อได้สูงสุด 3 กล่องต่อคำสั่งซื้อ' : 'Maximum 3 boxes per order'); return; }
       if(q > INVENTORY){ alert(lang==='th' ? 'จำนวนที่สั่งซื้อมากกว่าสินค้าคงเหลือ' : 'Quantity exceeds available stock'); return; }
       const total = q * UNIT_PRICE;
