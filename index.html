@@ -62,19 +62,19 @@
   <main class="container">
     <section class="card">
       <div class="gallery-main">
-        <img id="mainImg" src="https://m.media-amazon.com/images/I/81gKbPWr6PL.jpg" alt="Pop Secret Popcorn"/>
+        <img id="mainImg" src="https://i.ibb.co/9kvfpgzg/166578-0.jpg" alt="Pop Secret Popcorn"/>
       </div>
       <div class="thumbs" id="thumbs">
-        <img class="active" src="https://m.media-amazon.com/images/I/81gKbPWr6PL.jpg" alt="main">
-        <img src="https://m.media-amazon.com/images/I/71L2d2Bp3kL._AC_SL1500_.jpg" alt="side1">
-        <img src="https://m.media-amazon.com/images/I/71zqg5di7gL._AC_SL1500_.jpg" alt="side2">
-        <img src="https://m.media-amazon.com/images/I/71Xh3E7P0nL._AC_SL1500_.jpg" alt="back">
+        <img class="active" src="https://i.ibb.co/9kvfpgzg/166578-0.jpg" alt="main">
+        <img src="https://i.ibb.co/t57D3Tv/166579-0.jpg" alt="side1">
+        <img src="https://i.ibb.co/Zz8BXHZ0/166580-0.jpg" alt="side2">
+        <img src="https://i.ibb.co/SwB3Y16W/166581-0.jpg" alt="back">
       </div>
 
       <div class="details">
         <h1 id="t_name">Pop Secret Popcorn Movie Theater Butter 588g</h1>
-        <div class="subtle" id="t_sku">Ships from Thailand | Sold by Pop Secret TH</div>
-        <div class="price"><span id="t_price">Price</span>: <b><span id="price">229</span> THB</b></div>
+        <div class="subtle" id="t_sku">Ships from Thailand | Sold by TopsOffer TH</div>
+        <div class="price"><span id="t_price">Price</span>: <b><span id="price">1299</span> THB</b></div>
         <div class="meta-row">
           <span id="stockBadge" class="badge in">✔ In stock</span>
           <span id="viewerNow" class="viewer">23 people are viewing this now</span>
@@ -115,7 +115,7 @@
       </div>
       <div class="row">
         <div><b id="t_total">Total:</b></div>
-        <div><b><span id="total">229</span> THB</b></div>
+        <div><b><span id="total">1299</span> THB</b></div>
       </div>
       <button class="btn btn-cart" id="btnAddCart">Add to Cart</button>
       <button class="btn btn-buynow" id="btnBuyNow">Buy Now</button>
@@ -138,7 +138,7 @@
   <footer>© 2025 Pop Secret Thailand</footer>
 
   <script>
-    const UNIT_PRICE = 229;
+    const UNIT_PRICE = 1299;
     const PROMPTPAY_MOBILE = "0866292379";
     const PROMPTPAY_NATIONAL_ID = "5110100025854";
     const PROMPTPAY_USE = "mobile";
@@ -148,13 +148,13 @@
     let VIEWERS = Math.floor(Math.random()*10) + 18;
 
     const i18n = {
-      th:{brand:"ร้าน Pop Secret",cart:"ตะกร้า",name:"ข้าวโพดอบเนย Pop Secret 588g",sku:"จัดส่งจากไทย | ขายโดย Pop Secret TH",price:"ราคา",
+      th:{brand:"ร้าน Pop Secret",cart:"ตะกร้า",name:"ข้าวโพดอบเนย Pop Secret 588g",sku:"จัดส่งจากไทย | ขายโดย TopsOffer TH",price:"ราคา",
           bullets:["กลิ่นเนยหอมแบบโรงหนัง","แพ็คใหญ่ 588g","อุ่นไมโครเวฟ 2–3 นาที","เหมาะกับคืนดูหนัง & ปาร์ตี้"],
           reviews_title:"รีวิวจากลูกค้า",review_1:"หอมเนยเหมือนในโรงหนังเลย! คืนดู Netflix คือดีมาก",review_2:"เนยเข้มกว่ายี่ห้ออื่น ซื้อซ้ำแน่นอน!",
           qty:"จำนวน",total:"รวม",fullname:"ชื่อ-นามสกุล",phone:"เบอร์โทร",address:"ที่อยู่จัดส่ง",pay:"ชำระเงินผ่าน PromptPay",
           note:"ระบบจะสร้างคิวอาร์ PromptPay ตามยอดชำระของคุณ",ok:"ส่งคำสั่งซื้อเรียบร้อยแล้ว!",err:"ไม่สามารถส่งอีเมลได้ โปรดลองอีกครั้ง.",
           addcart:"เพิ่มลงตะกร้า",buynow:"ซื้อเลย",instock:"✔ สินค้าพร้อมส่ง",lowstock:"⚠ เหลือน้อย",viewing:(n)=> `${n} คนกำลังดูสินค้านี้อยู่ตอนนี้`},
-      en:{brand:"Pop Secret Shop",cart:"🛒 Cart",name:"Pop Secret Popcorn Movie Theater Butter 588g",sku:"Ships from Thailand | Sold by Pop Secret TH",price:"Price",
+      en:{brand:"Pop Secret Shop",cart:"🛒 Cart",name:"Pop Secret Popcorn Movie Theater Butter 588g",sku:"Ships from Thailand | Sold by TopsOffer TH",price:"Price",
           bullets:["Movie-theater butter aroma","Large 588g pack","Microwave in 2–3 minutes","Perfect for movie nights & parties"],
           reviews_title:"Customer reviews",review_1:"Smells just like the cinema! Perfect for Netflix nights.",review_2:"Richer butter flavor than other brands. Will repurchase!",
           qty:"Qty",total:"Total",fullname:"Full Name",phone:"Phone Number",address:"Shipping Address",pay:"Pay with PromptPay",
@@ -201,7 +201,7 @@
     });
 
     const qtyInput = document.getElementById('quantity'); const totalEl = document.getElementById('total');
-    function updateTotal(){ const qty = Math.max(1, parseInt(qtyInput.value||'1')); qtyInput.value = qty; totalEl.textContent = (qty * 229).toString(); }
+    function updateTotal(){ const qty = Math.max(1, parseInt(qtyInput.value||'1')); qtyInput.value = qty; totalEl.textContent = (qty * 1299).toString(); }
     qtyInput.addEventListener('input', updateTotal); qtyInput.addEventListener('change', updateTotal); updateTotal();
 
     function updateStockBadge(){
@@ -226,7 +226,7 @@
     async function submitOrder(){
       const qty = Math.max(1, parseInt(qtyInput.value||'1'));
       if(qty > INVENTORY){ alert(lang==='th' ? 'จำนวนที่สั่งซื้อมากกว่าสินค้าคงเหลือ' : 'Quantity exceeds available stock'); return; }
-      const total = qty * 229;
+      const total = qty * 1299;
       const name = document.getElementById('fname').value.trim();
       const phone = document.getElementById('phone').value.trim();
       const addr = document.getElementById('addr').value.trim();
