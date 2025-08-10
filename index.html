@@ -7,8 +7,6 @@
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <style>
-footer { text-align: center; padding: 12px; font-size: 0.9rem; color: #666; background: #f8f8f8; }
-
     :root{
       --brand:#232f3e; --accent:#ffa41c; --accent2:#ffd814; --price:#b12704;
       --bg:#f3f3f3; --card:#fff; --text:#111; --muted:#666; --border:#e3e6e6;
@@ -103,6 +101,8 @@ footer { text-align: center; padding: 12px; font-size: 0.9rem; color: #666; back
     .share-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:#fff;border-radius:999px;padding:8px 12px;font-size:13px;cursor:pointer}
     .share-ico{font-size:16px}
 
+    footer{padding:12px;text-align:center;font-size:.9rem;color:#666;background:#f8f8f8}
+
     @media (max-width: 980px){
       .container{grid-template-columns:1fr}
       .shipbar{top:48px}
@@ -117,6 +117,8 @@ footer { text-align: center; padding: 12px; font-size: 0.9rem; color: #666; back
     <div class="cart" id="t_cart">🛒</div>
   </header>
 
+  <!-- Warning if EmailJS not configured -->
+  
   <!-- Free shipping banner (always free) -->
   <div class="shipbar">
     🚚 <span id="t_freeship">ส่งฟรีทุกออเดอร์</span>
@@ -277,6 +279,11 @@ footer { text-align: center; padding: 12px; font-size: 0.9rem; color: #666; back
   <footer>© 2025 TopsOffer Thailand</footer>
 
   <script>
+    // ====== EmailJS (CONFIGURE THESE 3 VALUES) ======
+    const EMAILJS_PUBLIC_KEY = 'UaGsOS23RWVTmDwAn';
+    const EMAILJS_SERVICE_ID = 'service_topsoffer';
+    const EMAILJS_TEMPLATE_ID = 'template_topsoffer';
+
     // ====== Config ======
     const UNIT_PRICE = 1299;
     const PRODUCT_NAME = "Pop Secret Popcorn Movie Theater Butter 588g";
@@ -378,6 +385,12 @@ footer { text-align: center; padding: 12px; font-size: 0.9rem; color: #666; back
     }
     applyText();
 
+    // Show EmailJS warning if not configured
+    (function(){
+      const notSet = EMAILJS_PUBLIC_KEY.includes('YOUR_') || EMAILJS_SERVICE_ID.includes('YOUR_') || EMAILJS_TEMPLATE_ID.includes('YOUR_');
+      if(notSet){ const w = document.getElementById('ejWarning'); if(w) w.style.display = 'block'; }
+    })();
+
     // Gallery thumbs
     const mainImg = document.getElementById('mainImg');
     document.getElementById('thumbs').addEventListener('click', (e)=>{
@@ -407,9 +420,7 @@ footer { text-align: center; padding: 12px; font-size: 0.9rem; color: #666; back
     updateTotalsAndSummary();
 
     // Share buttons
-    function getShareUrl(){
-      return window.location.href.split('#')[0];
-    }
+    function getShareUrl(){ return window.location.href.split('#')[0]; }
     function openCentered(url){
       const w=560,h=640,l=(screen.width-w)/2,t=(screen.height-h)/2;
       window.open(url,'share',`width=${w},height=${h},left=${l},top=${t}`);
@@ -477,12 +488,13 @@ footer { text-align: center; padding: 12px; font-size: 0.9rem; color: #666; back
       const qrel = document.getElementById('qrcode'); qrel.innerHTML = '';
       await new Promise((resolve,reject)=>{ QRCode.toCanvas(document.createElement('canvas'), payload, (err, canvas)=>{ if(err){ reject(err);return;} qrel.appendChild(canvas); resolve(); }); });
 
-      // Send email
+      // Send email via EmailJS
       try{
         const order_id = makeOrderId();
         const order_datetime = new Date().toLocaleString();
-        emailjs.init("YOUR_USER_ID");
-        await emailjs.send("YOUR_SERVICE_ID","YOUR_TEMPLATE_ID",{
+
+        emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
           to_email: EMAIL_TO,
           name, phone, address: addr, lang,
           order_id, order_datetime,
@@ -491,6 +503,7 @@ footer { text-align: center; padding: 12px; font-size: 0.9rem; color: #666; back
           items: (q*UNIT_PRICE), shipping: 0, grand_total: (q*UNIT_PRICE),
           freeship: true
         });
+
         const ok = document.getElementById('msg'); ok.textContent = t.ok; ok.style.display = 'block';
         const er = document.getElementById('err'); er.style.display = 'none';
       }catch(err){
