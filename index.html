@@ -3,20 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TopsOffer Thailand — Pop Secret Popcorn</title>
-  <!-- EmailJS + QRCode -->
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <title>TopsOffer Thailand — Pop Secret Popcorn (Debug + CSP tips)</title>
+  <!-- ใช้ EmailJS รุ่น @emailjs/browser -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <!-- QRCode -->
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-
-  <!-- (Optional) Google Analytics: ใส่ GA4 Measurement ID ของคุณแทน G-XXXXXXX
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-XXXXXXX');
-  </script> -->
-
   <style>
     :root{
       --brand:#232f3e; --accent:#ffa41c; --accent2:#ffd814; --price:#b12704;
@@ -33,7 +24,11 @@
     .lang-switch button{background:#fff;color:#232f3e;border:1px solid #d5d9d9;border-radius:6px;padding:6px 8px;font-weight:bold;cursor:pointer}
     .lang-switch button.active{background:#ffd814;border-color:#fcd200}
 
-    /* Free shipping bar */
+    .banner{background:#fff3cd;color:#664d03;border:1px solid #ffecb5;padding:10px 12px}
+    .debug{background:#1e1e1e;color:#fff;padding:10px 12px;white-space:pre-wrap;font-size:12px}
+    .debug b{color:#ffd814}
+    .hide{display:none}
+
     .shipbar{
       background:var(--shipbg); color:var(--shipfg);
       text-align:center; padding:10px 12px; font-weight:bold;
@@ -62,13 +57,7 @@
     .viewer{font-size:13px;color:var(--viewer)}
 
     .bullets{margin:.5em 0 1em;padding-left:18px}
-
-    /* Description block */
     .desc{margin-top:12px;background:#fafbfd;border:1px solid var(--border);border-radius:10px;padding:14px 16px}
-    .desc h3{margin:0 0 8px 0;font-size:18px}
-    .desc p{margin:6px 0;line-height:1.6}
-
-    /* Feature icons */
     .features{margin-top:10px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
     .feat{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--border);border-radius:10px;padding:10px 12px}
     .feat .ico{font-size:20px;line-height:1.2}
@@ -79,7 +68,6 @@
     .btn{border:none;border-radius:20px;padding:12px 16px;font-weight:bold;cursor:pointer;width:100%}
     .btn-cart{background:var(--accent)}
     .btn-buynow{background:var(--accent2);margin-top:8px}
-    .btn:active{transform:translateY(1px)}
     .form label{display:block;margin-top:10px;font-size:14px}
     .form input,.form textarea{width:100%;padding:10px;border:1px solid #ccc;border-radius:6px;margin-top:6px;font-size:15px}
     .qrcode{text-align:center;margin-top:14px}
@@ -90,30 +78,13 @@
     .kpis{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px}
     .kpi{background:#f7f7f7;border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:13px}
 
-    /* Order Summary */
     .summary{margin-top:12px;border-top:1px dashed var(--border);padding-top:12px}
     .sum-row{display:flex;justify-content:space-between;margin:4px 0;font-size:14px}
     .sum-total{font-weight:bold;font-size:16px;margin-top:6px}
     .free{color:#067d62;font-weight:bold}
 
-    /* Reviews */
-    .reviews{margin-top:18px}
-    .review-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-    .review-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 12px}
-    .r-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
-    .avatar{width:36px;height:36px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:#eef2f7;color:#445}
-    .r-name{font-weight:bold}
-    .r-verified{font-size:12px;color:#067d62;background:#e7f6f1;border:1px solid #c6ece1;padding:2px 6px;border-radius:12px;margin-left:auto}
-    .r-stars{color:var(--star);font-size:14px;margin:4px 0}
-    .r-date{color:#888;font-size:12px}
-    .r-text{margin-top:4px;line-height:1.55}
-    .r-actions{margin-top:8px;display:flex;gap:10px}
-    .chip{font-size:12px;border:1px solid var(--border);border-radius:999px;padding:4px 8px;color:#333;background:#fafafa}
-
-    /* Share buttons */
     .share-row{display:flex;gap:10px;margin-top:10px}
     .share-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:#fff;border-radius:999px;padding:8px 12px;font-size:13px;cursor:pointer}
-    .share-ico{font-size:16px}
 
     footer{padding:12px;text-align:center;font-size:.9rem;color:#666;background:#f8f8f8}
 
@@ -121,7 +92,6 @@
       .container{grid-template-columns:1fr}
       .shipbar{top:48px}
       .features{grid-template-columns:1fr}
-      .review-grid{grid-template-columns:1fr}
     }
   </style>
 </head>
@@ -134,10 +104,13 @@
     </div>
   </header>
 
-  <!-- Free shipping (always) -->
+  <!-- Debug banners -->
+  <div id="bannerFile" class="banner hide">⚠️ คุณกำลังเปิดจาก <b>file://</b> — บางสคริปต์อาจไม่ทำงาน แนะนำเปิดผ่านเว็บเซิร์ฟเวอร์ (เช่น <code>python -m http.server 8000</code>)</div>
+  <div id="bannerCSP" class="banner hide">⚠️ อาจมี <b>Content-Security-Policy (CSP)</b> บนโฮสต์ที่บล็อคสคริปต์แบบ inline — ดูวิธีแก้ท้ายหน้า</div>
+  <div id="debug" class="debug hide"></div>
+
   <div class="shipbar">
-    🚚 <span id="t_freeship">ส่งฟรีทุกออเดอร์</span>
-    <small id="t_freeship_sub">ไม่มีขั้นต่ำ</small>
+    🚚 <span id="t_freeship">ส่งฟรีทุกออเดอร์</span> <small id="t_freeship_sub">ไม่มีขั้นต่ำ</small>
   </div>
 
   <main class="container">
@@ -172,14 +145,10 @@
           <li>Perfect for movie nights & parties</li>
         </ul>
 
-        <!-- Description -->
         <div class="desc">
           <h3 id="t_desc_title">Product Description</h3>
-          <p id="t_desc_intro">
-            🍿 Pop Secret Popcorn Movie Theater Butter 588g — rich buttery aroma just like at the cinema, ready in minutes.
-          </p>
+          <p id="t_desc_intro">🍿 Pop Secret Popcorn Movie Theater Butter 588g — rich buttery aroma just like at the cinema, ready in minutes.</p>
 
-          <!-- Features -->
           <div class="features" id="features">
             <div class="feat"><div class="ico">🍿</div><div><b id="f1h">Premium Kernels</b><div id="f1t">Fluffy, crispy pops for a satisfying crunch.</div></div></div>
             <div class="feat"><div class="ico">🧈</div><div><b id="f2h">Movie Theater Butter</b><div id="f2t">Savory, buttery flavor that feels like the cinema.</div></div></div>
@@ -187,47 +156,9 @@
             <div class="feat"><div class="ico">🎬</div><div><b id="f4h">Made for Movie Night</b><div id="f4t">Perfect for Netflix, parties, or a quick snack.</div></div></div>
           </div>
 
-          <!-- Share -->
           <div class="share-row">
-            <button class="share-btn" id="shareLine"><span class="share-ico">💚</span> Share on LINE</button>
-            <button class="share-btn" id="shareFb"><span class="share-ico">🔵</span> Share on Facebook</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Reviews -->
-      <div class="reviews">
-        <h2 id="t_reviews_title">Customer reviews</h2>
-        <div class="review-grid">
-          <div class="review-card">
-            <div class="r-head"><div class="avatar">B</div><div class="r-name">Beam</div><div class="r-verified">Verified</div></div>
-            <div class="r-stars">★★★★★</div><div class="r-date">2025-08-01</div>
-            <div class="r-text">Smells just like the cinema! Perfect for Netflix nights.</div>
-            <div class="r-actions"><span class="chip">👍 Helpful</span><span class="chip">🍿 Good taste</span></div>
-          </div>
-          <div class="review-card">
-            <div class="r-head"><div class="avatar">N</div><div class="r-name">Nan</div><div class="r-verified">Verified</div></div>
-            <div class="r-stars">★★★★☆</div><div class="r-date">2025-07-28</div>
-            <div class="r-text">Richer butter flavor than other brands. Will repurchase!</div>
-            <div class="r-actions"><span class="chip">👍 Helpful</span><span class="chip">⚡ Fast ship</span></div>
-          </div>
-          <div class="review-card">
-            <div class="r-head"><div class="avatar">M</div><div class="r-name">Mint</div><div class="r-verified">Verified</div></div>
-            <div class="r-stars">★★★★★</div><div class="r-date">2025-07-20</div>
-            <div class="r-text">Crispy and buttery, kids love it!</div>
-            <div class="r-actions"><span class="chip">👍 Helpful</span><span class="chip">👨‍👩‍👧 Family</span></div>
-          </div>
-          <div class="review-card">
-            <div class="r-head"><div class="avatar">A</div><div class="r-name">Art</div><div class="r-verified">Verified</div></div>
-            <div class="r-stars">★★★★★</div><div class="r-date">2025-07-12</div>
-            <div class="r-text">Fast shipping and great taste.</div>
-            <div class="r-actions"><span class="chip">👍 Helpful</span><span class="chip">🚚 Shipping</span></div>
-          </div>
-          <div class="review-card">
-            <div class="r-head"><div class="avatar">P</div><div class="r-name">Pat</div><div class="r-verified">Verified</div></div>
-            <div class="r-stars">★★★★☆</div><div class="r-date">2025-07-05</div>
-            <div class="r-text">Big portion, worth the price.</div>
-            <div class="r-actions"><span class="chip">👍 Helpful</span><span class="chip">💰 Value</span></div>
+            <button class="share-btn" id="shareLine">Share on LINE</button>
+            <button class="share-btn" id="shareFb">Share on Facebook</button>
           </div>
         </div>
       </div>
@@ -240,7 +171,6 @@
       </div>
       <div class="row"><div><b id="t_total">Total:</b></div><div><b><span id="total">1299</span> THB</b></div></div>
 
-      <!-- Order Summary -->
       <div class="summary">
         <div class="sum-row"><span id="t_sum_items">Items</span> <span><span id="sumItems">1299</span> THB</span></div>
         <div class="sum-row"><span id="t_sum_ship">Shipping</span> <span class="free" id="sumShip">FREE</span></div>
@@ -269,32 +199,38 @@
   <footer>© 2025 TopsOffer Thailand</footer>
 
   <script>
-    // ====== EmailJS (YOUR REAL CONFIG already set) ======
+    // ===== Debug helpers =====
+    const dbg = document.getElementById('debug');
+    function showDebug(msg){
+      dbg.classList.remove('hide');
+      dbg.textContent += (typeof msg==='string'? msg : JSON.stringify(msg, null, 2)) + "\\n";
+      console.log(msg);
+    }
+    if(location.protocol === 'file:'){ document.getElementById('bannerFile').classList.remove('hide'); }
+    // ถ้า script นี้รันได้ แปลว่า inline script "ยังรันได้" อย่างน้อยตอนนี้
+
+    // ===== Configs =====
     const EMAILJS_PUBLIC_KEY = 'UaGsOS23RWVTmDwAn';
     const EMAILJS_SERVICE_ID = 'service_topsoffer';
     const EMAILJS_TEMPLATE_ID = 'template_topsoffer';
     const EMAIL_TO = "officialvoucher@gmail.com";
 
-    // ====== Product / Payment Config ======
     const UNIT_PRICE = 1299;
     const PRODUCT_NAME = "Pop Secret Popcorn Movie Theater Butter 588g";
     const PROMPTPAY_MOBILE = "0866292379";
     const PROMPTPAY_NATIONAL_ID = "5110100025854";
     const PROMPTPAY_USE = "mobile"; // 'mobile' or 'nid'
 
-    // Stock policy
-    const ENFORCE_STOCK = false;  // ถ้า true จะตรวจ q > INVENTORY
-    let   INVENTORY = 9999;       // ใช้เลขสูงเพื่อทดสอบ; ถ้า ENFORCE_STOCK=true ให้ตั้งเป็นสต๊อกจริง
+    const ENFORCE_STOCK = false;
+    let INVENTORY = 9999;
 
-    // Live stats
     let VIEWERS = Math.floor(Math.random()*10) + 18;
     let SALES_TODAY = Math.floor(Math.random()*8) + 12;
     const promoEnd = (()=>{ const now = new Date(); return new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59); })();
 
-    // ====== i18n ======
+    // ===== i18n =====
     const i18n = {
-      th:{
-        brand:"TopsOffer Thailand", cart:"ตะกร้า", name:"ข้าวโพดอบเนย Pop Secret 588g",
+      th:{brand:"TopsOffer Thailand", cart:"ตะกร้า", name:"ข้าวโพดอบเนย Pop Secret 588g",
         sku:"จัดส่งจากไทย | ขายโดย TopsOffer Thailand", price:"ราคา",
         bullets:["กลิ่นเนยหอมแบบโรงหนัง","แพ็คใหญ่ 588g","อุ่นไมโครเวฟ 2–3 นาที","เหมาะกับคืนดูหนัง & ปาร์ตี้"],
         reviews_title:"รีวิวจากลูกค้า", count_reviews:"5 รีวิว", qty:"จำนวน (สูงสุด 3)", total:"รวม",
@@ -312,8 +248,7 @@
         f3h:"พร้อมกินใน 3–4 นาที", f3t:"แค่อุ่นไมโครเวฟ—ไม่ต้องใช้น้ำมัน",
         f4h:"เกิดมาเพื่อคืนดูหนัง", f4t:"เหมาะกับซีรีส์ ปาร์ตี้ หรือของว่างเร็ว ๆ"
       },
-      en:{
-        brand:"TopsOffer Thailand", cart:"🛒 Cart", name:"Pop Secret Popcorn Movie Theater Butter 588g",
+      en:{brand:"TopsOffer Thailand", cart:"🛒 Cart", name:"Pop Secret Popcorn Movie Theater Butter 588g",
         sku:"Ships from Thailand | Sold by TopsOffer Thailand", price:"Price",
         bullets:["Movie-theater butter aroma","Large 588g pack","Microwave in 2–3 minutes","Perfect for movie nights & parties"],
         reviews_title:"Customer reviews", count_reviews:"5 reviews", qty:"Qty (max 3)", total:"Total",
@@ -332,29 +267,11 @@
         f4h:"Made for Movie Night", f4t:"Perfect for Netflix, parties, or a quick snack."
       }
     };
-
-    // ====== Language init ======
-    let lang = (localStorage.getItem('lang')) ? localStorage.getItem('lang') :
-               ((navigator.language||'en').toLowerCase().startsWith('th') ? 'th' : 'en');
+    let lang = localStorage.getItem('lang') || ((navigator.language||'en').toLowerCase().startsWith('th') ? 'th' : 'en');
     let t = i18n[lang]; document.documentElement.lang = (lang==='th'?'th':'en');
 
-    function updateLangButtons(){
-      var th = document.getElementById('langTH');
-      var en = document.getElementById('langEN');
-      if(!th||!en) return;
-      th.classList.toggle('active', lang==='th');
-      en.classList.toggle('active', lang==='en');
-    }
-    function switchLang(newLang){
-      lang = (newLang==='th') ? 'th' : 'en';
-      t = i18n[lang];
-      localStorage.setItem('lang', lang);
-      document.documentElement.lang = (lang==='th'?'th':'en');
-      applyText();
-      updateLangButtons();
-    }
-
-    function applyText(){
+    function setText(){
+      const bl = document.getElementById('t_bullets'); bl.innerHTML=''; t.bullets.forEach(x=>{ const li=document.createElement('li'); li.textContent=x; bl.appendChild(li); });
       document.getElementById('t_brand').textContent = t.brand;
       document.getElementById('t_cart').textContent = t.cart;
       document.getElementById('t_name').textContent = t.name;
@@ -372,195 +289,167 @@
       document.getElementById('t_freeship_sub').textContent = t.freeship_sub;
       document.getElementById('t_desc_title').textContent = t.desc_title;
       document.getElementById('t_desc_intro').textContent = t.desc_intro;
-
-      // bullets
-      const bl = document.getElementById('t_bullets'); bl.innerHTML = '';
-      t.bullets.forEach(x=>{const li=document.createElement('li');li.textContent=x;bl.appendChild(li);});
-
-      updateStockBadge(); updateViewer(); updateSales(); updateCountdown();
-      updateTotalsAndSummary();
     }
-    applyText(); updateLangButtons();
+    function switchLang(l){ lang = l; t = i18n[l]; localStorage.setItem('lang', l); document.documentElement.lang = (l==='th'?'th':'en'); setText(); updateBtns(); updateAll(); }
+    function updateBtns(){ document.getElementById('langTH').classList.toggle('active', lang==='th'); document.getElementById('langEN').classList.toggle('active', lang==='en'); }
 
-    // Lang buttons
-    document.getElementById('langTH').addEventListener('click', ()=> switchLang('th'));
-    document.getElementById('langEN').addEventListener('click', ()=> switchLang('en'));
-
-    // Gallery thumbs
-    const mainImg = document.getElementById('mainImg');
-    document.getElementById('thumbs').addEventListener('click', (e)=>{
-      if(e.target.tagName.toLowerCase()==='img'){
-        [...document.querySelectorAll('.thumbs img')].forEach(i=>i.classList.remove('active'));
-        e.target.classList.add('active'); mainImg.src = e.target.src;
-      }
-    });
-
-    // Qty & totals & summary
-    const qtyInput = document.getElementById('quantity');
-    const totalEl = document.getElementById('total');
-    const sumItemsEl = document.getElementById('sumItems');
-    const sumShipEl = document.getElementById('sumShip');
-    const sumGrandEl = document.getElementById('sumGrand');
-
-    function clampQty(v){ return Math.min(3, Math.max(1, v)); } // จำกัด 3 ชิ้น/ออเดอร์
-    function updateTotalsAndSummary(){
-      let qty = clampQty(parseInt(qtyInput.value||'1'));
-      qtyInput.value = qty;
-      const items = qty * UNIT_PRICE;
-      const ship = 0;
-      const grand = items + ship;
-      totalEl.textContent = items.toString();
-      sumItemsEl.textContent = items.toString();
-      sumShipEl.textContent = t.free;
-      sumGrandEl.textContent = grand.toString();
+    // Totals/Summary + Limits (max 3)
+    const UNIT_PRICE = 1299; // ย้ำให้แน่ใจ
+    const qtyEl = document.getElementById('quantity'), totalEl = document.getElementById('total');
+    const sumItemsEl = document.getElementById('sumItems'), sumShipEl = document.getElementById('sumShip'), sumGrandEl = document.getElementById('sumGrand');
+    function clampQty(v){ return Math.min(3, Math.max(1, v)); }
+    function updateTotals(){
+      const q = clampQty(parseInt(qtyEl.value||'1')); qtyEl.value = q;
+      const items = q*UNIT_PRICE; totalEl.textContent = items; sumItemsEl.textContent = items; sumShipEl.textContent = t.free; sumGrandEl.textContent = items;
     }
-    qtyInput.addEventListener('input', updateTotalsAndSummary);
-    qtyInput.addEventListener('change', updateTotalsAndSummary);
-    updateTotalsAndSummary();
 
-    // Share buttons
-    function getShareUrl(){ return window.location.href.split('#')[0]; }
-    function openCentered(url){
-      const w=560,h=640,l=(screen.width-w)/2,t=(screen.height-h)/2;
-      window.open(url,'share',`width=${w},height=${h},left=${l},top=${t}`);
-    }
-    document.getElementById('shareLine').addEventListener('click', ()=>{
-      const u = encodeURIComponent(getShareUrl());
-      const txt = encodeURIComponent("Pop Secret Popcorn 588g — Movie Theater Butter");
-      openCentered(`https://social-plugins.line.me/lineit/share?url=${u}%0A${txt}`);
-    });
-    document.getElementById('shareFb').addEventListener('click', ()=>{
-      const u = encodeURIComponent(getShareUrl());
-      openCentered(`https://www.facebook.com/sharer/sharer.php?u=${u}`);
-    });
+    // Live stats
+    let VIEWERS = Math.floor(Math.random()*10) + 18;
+    let SALES_TODAY = Math.floor(Math.random()*8) + 12;
+    function updateViewer(){ document.getElementById('viewerNow').textContent = t.viewing(VIEWERS); }
+    function updateSales(){ document.getElementById('salesToday').textContent = SALES_TODAY; }
+    const promoEndDate = (()=>{ const now=new Date(); return new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23,59,59); })();
+    function updateCountdown(){ const now=new Date(); let d=Math.max(0,promoEndDate-now); const h=String(Math.floor(d/3600000)).padStart(2,'0'); d%=3600000; const m=String(Math.floor(d/60000)).padStart(2,'0'); d%=60000; const s=String(Math.floor(d/1000)).padStart(2,'0'); document.getElementById('countdown').textContent = `${h}:${m}:${s}`; }
 
-    // In stock / viewers / sales
     function updateStockBadge(){
       const el = document.getElementById('stockBadge');
       const cls = (ENFORCE_STOCK && INVENTORY <= 10) ? 'badge low' : 'badge in';
       el.className = cls;
-      el.textContent = (ENFORCE_STOCK && INVENTORY <= 10) ? `${t.lowstock} (${INVENTORY})` : `${t.instock}${ENFORCE_STOCK ? ' ('+INVENTORY+')':''}`;
+      el.textContent = (ENFORCE_STOCK && INVENTORY <= 10) ? `${t.lowstock} (${INVENTORY})` : `${t.instock}${ENFORCE_STOCK?' ('+INVENTORY+')':''}`;
     }
-    function updateViewer(){ document.getElementById('viewerNow').textContent = t.viewing(VIEWERS); }
-    function updateSales(){ document.getElementById('salesToday').textContent = SALES_TODAY; }
-    (function jitter(){
-      const ms = (Math.random()*6000)+6000;
-      setTimeout(()=>{
-        const d = Math.floor(Math.random()*5)-2;
-        VIEWERS = Math.min(48, Math.max(8, VIEWERS + d));
-        if(Math.random()<0.25){ SALES_TODAY += 1; updateSales(); }
+
+    function updateAll(){ updateStockBadge(); updateViewer(); updateSales(); updateTotals(); }
+
+    // Share
+    function getShareUrl(){ return location.href.split('#')[0]; }
+    function popup(u){ const w=560,h=640,l=(screen.width-w)/2,t=(screen.height-h)/2; window.open(u,'share',`width=${w},height=${h},left=${l},top=${t}`); }
+
+    // QR + EmailJS
+    function tlv(id,val){ const len=val.length; return id+String(len).padStart(2,'0')+val; }
+    function crc16(str){ let crc=0xFFFF; for(let i=0;i<str.length;i++){ crc^=str.charCodeAt(i)<<8; for(let j=0;j<8;j++){ crc=(crc&0x8000)?((crc<<1)^0x1021):(crc<<1); crc&=0xFFFF; } } return crc.toString(16).toUpperCase().padStart(4,'0'); }
+    function buildPromptPayPayload(acc, amount){
+      const isNatId=/^\d{13}$/.test(acc), isPhone=/^0\d{9}$/.test(acc);
+      let proxy=''; if(isPhone){ proxy='66'+acc.substring(1); } else if(isNatId){ proxy=acc; } else { throw new Error('Invalid PromptPay ID'); }
+      const gui='A000000677010111', mai=tlv('00',gui)+tlv(isPhone?'01':'02',proxy), maiAll=tlv('29',mai);
+      const payload=tlv('00','01')+tlv('01','11')+maiAll+tlv('52','0000')+tlv('53','764')+tlv('54',amount.toFixed(2))+tlv('58','TH')+tlv('59','-')+tlv('60','Bangkok')+'6304';
+      return payload+crc16(payload);
+    }
+
+    function makeOrderId(){ const d=new Date(); const pad=n=>String(n).padStart(2,'0'); const ts=d.getFullYear().toString().slice(2)+pad(d.getMonth()+1)+pad(d.getDate())+pad(d.getHours())+pad(d.getMinutes())+pad(d.getSeconds()); const rnd=Math.random().toString(36).slice(-4).toUpperCase(); return `TP-${ts}-${rnd}`; }
+
+    function init(){
+      // Banners
+      try{
+        // ถ้า DOMContentLoaded ทำงาน แปลว่า inline script ผ่านระดับหนึ่ง
+        // ทดสอบ EmailJS/QRCode พร้อมใช้ไหม
+        if(!window.emailjs){ document.getElementById('bannerCSP').classList.remove('hide'); showDebug('EmailJS not loaded'); }
+        if(!window.QRCode){ document.getElementById('bannerCSP').classList.remove('hide'); showDebug('QRCode library not loaded'); }
+      }catch(e){ showDebug(e); }
+
+      setText(); updateBtns(); updateAll(); updateCountdown();
+      setInterval(()=>{ // jitter viewers/sales
+        const d=Math.floor(Math.random()*5)-2; VIEWERS=Math.min(48,Math.max(8,VIEWERS+d));
+        if(Math.random()<0.25){ SALES_TODAY+=1; updateSales(); }
         updateViewer();
-        jitter();
-      }, ms);
-    })();
+      }, 6000);
+      setInterval(updateCountdown, 1000);
 
-    // Countdown
-    function updateCountdown(){
-      const now = new Date();
-      let diff = Math.max(0, promoEnd - now);
-      const h = String(Math.floor(diff/3600000)).padStart(2,'0'); diff %= 3600000;
-      const m = String(Math.floor(diff/60000)).padStart(2,'0'); diff %= 60000;
-      const s = String(Math.floor(diff/1000)).padStart(2,'0');
-      document.getElementById('countdown').textContent = `${h}:${m}:${s}`;
-    }
-    setInterval(updateCountdown, 1000);
+      document.getElementById('langTH').onclick=()=>switchLang('th');
+      document.getElementById('langEN').onclick=()=>switchLang('en');
 
-    // Buttons
-    document.getElementById('btnAddCart').addEventListener('click', ()=>{
-      let cur = clampQty(parseInt(qtyInput.value||'1'));
-      if(cur >= 3){ alert(lang==='th' ? 'สั่งซื้อได้สูงสุด 3 กล่องต่อคำสั่งซื้อ' : 'Maximum 3 boxes per order'); return; }
-      qtyInput.value = clampQty(cur + 1);
-      updateTotalsAndSummary();
-      document.getElementById('orderForm').scrollIntoView({behavior:'smooth'});
-    });
-    document.getElementById('btnBuyNow').addEventListener('click', ()=>{
-      document.getElementById('orderForm').reportValidity();
-      if(document.getElementById('orderForm').checkValidity()){ submitOrder(); }
-    });
+      const mainImg=document.getElementById('mainImg');
+      document.getElementById('thumbs').addEventListener('click',e=>{
+        if(e.target.tagName.toLowerCase()==='img'){
+          [...document.querySelectorAll('.thumbs img')].forEach(i=>i.classList.remove('active'));
+          e.target.classList.add('active'); mainImg.src=e.target.src;
+        }
+      });
 
-    // Form submit
-    document.getElementById('orderForm').addEventListener('submit', (e)=>{ e.preventDefault(); submitOrder(); });
+      document.getElementById('shareLine').onclick=()=>{
+        const u=encodeURIComponent(getShareUrl()); const txt=encodeURIComponent("Pop Secret Popcorn 588g — Movie Theater Butter");
+        popup(`https://social-plugins.line.me/lineit/share?url=${u}%0A${txt}`);
+      };
+      document.getElementById('shareFb').onclick=()=>{
+        const u=encodeURIComponent(getShareUrl()); popup(`https://www.facebook.com/sharer/sharer.php?u=${u}`);
+      };
 
-    function makeOrderId(){
-      const d = new Date(); const pad = (n)=> String(n).padStart(2,"0");
-      const ts = d.getFullYear().toString().slice(2)+pad(d.getMonth()+1)+pad(d.getDate())+pad(d.getHours())+pad(d.getMinutes())+pad(d.getSeconds());
-      const rnd = Math.random().toString(36).slice(-4).toUpperCase();
-      return `TP-${ts}-${rnd}`;
+      const qtyEl=document.getElementById('quantity');
+      qtyEl.addEventListener('input', updateTotals);
+      qtyEl.addEventListener('change', updateTotals);
+
+      document.getElementById('btnAddCart').onclick=()=>{
+        let cur=parseInt(qtyEl.value||'1'); if(cur>=3){ alert(lang==='th'?'สั่งซื้อได้สูงสุด 3 กล่องต่อคำสั่งซื้อ':'Maximum 3 boxes per order'); return; }
+        qtyEl.value=Math.min(3,cur+1); updateTotals(); document.getElementById('orderForm').scrollIntoView({behavior:'smooth'});
+      };
+      document.getElementById('btnBuyNow').onclick=()=>{
+        const f=document.getElementById('orderForm'); f.reportValidity(); if(f.checkValidity()){ submitOrder(); }
+      };
+      document.getElementById('orderForm').addEventListener('submit', e=>{ e.preventDefault(); submitOrder(); });
     }
 
     async function submitOrder(){
-      const q = clampQty(parseInt(qtyInput.value||'1'));
-      if(ENFORCE_STOCK && q > INVENTORY){
-        alert(lang==='th' ? 'จำนวนที่สั่งซื้อมากกว่าสินค้าคงเหลือ' : 'Quantity exceeds available stock');
-        return;
-      }
-      const total = q * UNIT_PRICE;
-      const name = document.getElementById('fname').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-      const addr = document.getElementById('addr').value.trim();
-      if(!name || !phone || !addr){ return; }
-
-      // Build PromptPay QR
-      const account = (PROMPTPAY_USE === 'nid') ? PROMPTPAY_NATIONAL_ID : PROMPTPAY_MOBILE;
-      const payload = buildPromptPayPayload(account, total);
-      const qrel = document.getElementById('qrcode'); qrel.innerHTML = '';
-      await new Promise((resolve,reject)=>{
-        QRCode.toCanvas(document.createElement('canvas'), payload, (err, canvas)=>{
-          if(err){ reject(err); return; }
-          qrel.appendChild(canvas); resolve();
-        });
-      });
-
-      // Send Email (EmailJS)
       try{
-        const order_id = makeOrderId();
-        const order_datetime = new Date().toLocaleString();
+        const q=Math.min(3, Math.max(1, parseInt(document.getElementById('quantity').value||'1')));
+        if(ENFORCE_STOCK && q>INVENTORY){ alert(lang==='th'?'จำนวนที่สั่งซื้อมากกว่าสินค้าคงเหลือ':'Quantity exceeds available stock'); return; }
+        const name=document.getElementById('fname').value.trim();
+        const phone=document.getElementById('phone').value.trim();
+        const addr=document.getElementById('addr').value.trim();
+        if(!name||!phone||!addr){ return; }
 
+        const total=q*UNIT_PRICE;
+        const account=(PROMPTPAY_USE==='nid')?PROMPTPAY_NATIONAL_ID:PROMPTPAY_MOBILE;
+        const payload=buildPromptPayPayload(account,total);
+        const box=document.getElementById('qrcode'); box.innerHTML='';
+        if(!window.QRCode){ showDebug('QRCode not ready'); throw new Error('QRCode not loaded'); }
+        await new Promise((resolve,reject)=>{ QRCode.toCanvas(document.createElement('canvas'), payload, (err,canvas)=>{ if(err){reject(err);return;} box.appendChild(canvas); resolve(); }); });
+
+        // EmailJS
+        if(!window.emailjs){ showDebug('EmailJS not ready'); throw new Error('EmailJS not loaded'); }
         emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
-        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-          to_email: EMAIL_TO,
-          name, phone, address: addr, lang,
-          order_id, order_datetime,
-          product_name: PRODUCT_NAME,
-          quantity: q, unit_price: UNIT_PRICE,
-          items: (q*UNIT_PRICE), shipping: 0, grand_total: (q*UNIT_PRICE),
-          freeship: true
-        });
+        const order_id=makeOrderId(), order_datetime=new Date().toLocaleString();
+        const mailVars={
+          to_email: EMAIL_TO, name, phone, address: addr, lang,
+          order_id, order_datetime, product_name: PRODUCT_NAME,
+          quantity:q, unit_price:UNIT_PRICE, items:(q*UNIT_PRICE),
+          shipping:0, grand_total:(q*UNIT_PRICE), freeship:true
+        };
+        showDebug({sending_email_with: mailVars});
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, mailVars);
 
-        if(ENFORCE_STOCK){ INVENTORY -= q; }
-        SALES_TODAY += q; updateStockBadge(); updateSales();
-        const ok = document.getElementById('msg'); ok.textContent = t.ok; ok.style.display = 'block';
-        const er = document.getElementById('err'); er.style.display = 'none';
-      }catch(err){
-        const er = document.getElementById('err'); er.textContent = t.err; er.style.display = 'block';
-        const ok = document.getElementById('msg'); ok.style.display = 'none';
+        if(ENFORCE_STOCK){ INVENTORY-=q; } SALES_TODAY+=q; updateStockBadge(); updateSales();
+        document.getElementById('msg').textContent = t.ok; document.getElementById('msg').style.display='block';
+        document.getElementById('err').style.display='none';
+      }catch(e){
+        document.getElementById('err').textContent = t.err + " | " + e.message;
+        document.getElementById('err').style.display='block';
+        document.getElementById('msg').style.display='none';
+        showDebug(e);
+        document.getElementById('bannerCSP').classList.remove('hide');
       }
     }
 
-    // ====== PromptPay Payload ======
-    function tlv(id, value){ const len = value.length; const lenStr = len.toString().padStart(2,'0'); return id + lenStr + value; }
-    function buildPromptPayPayload(acc, amount){
-      const isNatId = /^\d{13}$/.test(acc); const isPhone = /^0\d{9}$/.test(acc);
-      let proxy = ''; if(isPhone){ proxy = '66' + acc.substring(1); } else if(isNatId){ proxy = acc; } else { throw new Error('Invalid PromptPay ID'); }
-      const gui = 'A000000677010111';
-      const mai = tlv('00', gui) + tlv(isPhone ? '01':'02', proxy);
-      const maiAll = tlv('29', mai);
-      const payload = tlv('00','01') + tlv('01','11') + maiAll + tlv('52','0000') + tlv('53','764') +
-                      tlv('54', amount.toFixed(2)) + tlv('58','TH') + tlv('59','-') + tlv('60','Bangkok') + '6304';
-      const crc = crc16(payload).toUpperCase();
-      return payload + crc;
-    }
-    function crc16(str){
-      let crc = 0xFFFF;
-      for(let i=0;i<str.length;i++){
-        crc ^= str.charCodeAt(i) << 8;
-        for(let j=0;j<8;j++){
-          crc = (crc & 0x8000) ? ((crc<<1) ^ 0x1021) : (crc<<1);
-          crc &= 0xFFFF;
-        }
-      }
-      return crc.toString(16).toUpperCase().padStart(4,'0');
-    }
+    // Bootstrap
+    document.addEventListener('DOMContentLoaded', init);
   </script>
+
+  <!-- ===== HOW TO FIX CSP on Netlify (สรุปสั้น ๆ) =====
+  1) ถ้าคุณ Deploy ด้วยโฟลเดอร์ (ไม่ใช่ไฟล์เดี่ยว):
+     - สร้างไฟล์ _headers วางข้าง index.html ใส่:
+       /*
+         Content-Security-Policy: default-src 'self' https:;
+           img-src * data:;
+           script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline';
+           style-src 'self' 'unsafe-inline';
+           connect-src *;
+
+  2) หรือใช้ netlify.toml:
+     [[headers]]
+       for = "/*"
+       [headers.values]
+       Content-Security-Policy = "default-src 'self' https:; img-src * data:; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src *;"
+
+  3) ถ้ายังอยาก "ไฟล์เดียว" จริง ๆ: ต้องอนุญาต 'unsafe-inline' ใน script-src
+     (เพราะโค้ดทั้งหมดอยู่ภายใน <script> ของไฟล์เดียว)
+  -->
 </body>
 </html>
