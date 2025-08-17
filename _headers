@@ -1,0 +1,6 @@
+/*
+  Content-Security-Policy: default-src 'self' https:;
+    img-src * data: blob:;
+    script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline';
+    style-src 'self' 'unsafe-inline';
+    connect-src *;
